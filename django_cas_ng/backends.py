@@ -5,7 +5,7 @@ import datetime
 
 from django.utils.six.moves import urllib_parse
 from django.utils.six.moves.urllib_request import urlopen, Request
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.conf import settings
 
@@ -13,7 +13,8 @@ from uuid import uuid4
 
 from django_cas_ng.signals import cas_user_authenticated
 
-User = get_user_model()
+from mongoengine.django.auth import User
+# User = get_user_model()
 
 __all__ = ['CASBackend']
 
@@ -252,7 +253,7 @@ class CASBackend(ModelBackend):
             if not create:
                 return None
             # user will have an "unusable" password
-            user = User.objects.create_user(username, '')
+            user = User.create_user(username, None)
             user.save()
             created = True
 
