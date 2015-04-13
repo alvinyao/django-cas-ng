@@ -5,7 +5,6 @@ import datetime
 
 from django.utils.six.moves import urllib_parse
 from django.utils.six.moves.urllib_request import urlopen, Request
-# from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.conf import settings
 
@@ -13,8 +12,14 @@ from uuid import uuid4
 
 from django_cas_ng.signals import cas_user_authenticated
 
-from mongoengine.django.auth import User
-# User = get_user_model()
+is_mongo_backend = getattr(settings, 'CAS_MONGO_BACKEND', True)
+
+if is_mongo_backend:
+    from mongoengine.django.mongo_auth.models import get_user_document
+    User = get_user_document()
+else:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
 
 __all__ = ['CASBackend']
 
