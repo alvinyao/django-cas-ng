@@ -15,7 +15,11 @@ from django_cas_ng.signals import cas_user_authenticated
 is_mongo_backend = getattr(settings, 'CAS_MONGO_BACKEND', True)
 
 if is_mongo_backend:
-    from mongoengine.django.mongo_auth.models import get_user_document
+    # support django_mongoengine for django >= 1.8
+    try:
+        from django_mongoengine.mongo_auth.managers import get_user_document
+    except:
+        from mongoengine.django.mongo_auth.models import get_user_document
     User = get_user_document()
 else:
     from django.contrib.auth import get_user_model
