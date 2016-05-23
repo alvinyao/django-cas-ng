@@ -18,7 +18,7 @@ if is_mongo_backend:
     # support django_mongoengine for django >= 1.8
     try:
         from django_mongoengine.mongo_auth.managers import get_user_document
-    except:
+    except ImportError:
         from mongoengine.django.mongo_auth.models import get_user_document
     User = get_user_document()
 else:
